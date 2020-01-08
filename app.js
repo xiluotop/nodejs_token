@@ -25,13 +25,18 @@ app.use(function (req, res, next) {
     if (result == 'err') {
       console.log(result);
       res.send({
+        status: 500,
+        msg: '认证失败，请重新登录！'
+      });
+      // res.render('login.html');
+    } else if (result == 'timeout') {
+      res.send({
         status: 403,
         msg: '登录已过期,请重新登录'
       });
-      // res.render('login.html');
     } else {
       res.send({
-        res:result,
+        res: result,
         status: 200,
         msg: '验证成功!'
       });

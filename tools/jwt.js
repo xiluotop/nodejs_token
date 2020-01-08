@@ -6,6 +6,7 @@ const jwt = require('jwt-simple')
 
 // 创建 token 类
 class Jwt {
+  // 传入数据
   constructor(data) {
     this.data = data;
   }
@@ -27,12 +28,16 @@ class Jwt {
     let cert = fs.readFileSync(path.join(__dirname, '../key/pravite_key.txt'));
     let res;
     try {
+      // 解析 token 并可以获取到之前使用 this.data 生成token 的数据
       let result = jwt.decode(token, cert) || {};
       let {
         exp = 0
       } = result, current = Math.floor(Date.now() / 1000);
+      // 判断时间，如果当前时间大于第一次的时间，则为超时
       if(current<=exp){
         res = result.data || {}
+      } else {
+        res = 'timeout'
       }
     } catch (error) {
       res = 'err'
